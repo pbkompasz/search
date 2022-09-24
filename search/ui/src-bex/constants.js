@@ -1,0 +1,9 @@
+const SEARCH_INPUT_CLASS = 'RNNXgb'
+const SEARCH_INPUT_JSNAME = 'RNNXgb'
+const APPBAR_CLASS = 'appbar'
+
+export {
+  SEARCH_INPUT_CLASS,
+  SEARCH_INPUT_JSNAME,
+  APPBAR_CLASS,
+}

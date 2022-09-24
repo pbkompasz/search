@@ -1,20 +1,46 @@
+// src-bex/my-content-script.js
+
 // Hooks added here have a bridge allowing communication between the BEX Content Script and the Quasar Application.
 // More info: https://quasar.dev/quasar-cli/developing-browser-extensions/content-hooks
-
 import { bexContent } from 'quasar/wrappers'
+import {
+  SEARCH_INPUT_CLASS,
+} from './constants';
 
-export default bexContent((/* bridge */) => {
-  // Hook into the bridge to listen for events sent from the client BEX.
-  /*
-  bridge.on('some.event', event => {
-    if (event.data.yourProp) {
-      // Access a DOM element from here.
-      // Document in this instance is the underlying website the contentScript runs on
-      const el = document.getElementById('some-id')
-      if (el) {
-        el.value = 'Quasar Rocks!'
-      }
+const
+  searchInputs = document.createElement('div'),
+  searchFrame = document.createElement('iframe'),
+  minimizeButton = document.createElement('button'),
+  searchInputOriginal = document.getElementsByClassName(SEARCH_INPUT_CLASS)[0];
+
+
+/**
+ * The code below will get everything going. Initialize the iFrame with defaults and add it to the page.
+ * @type {string}
+ */
+searchInputs.id = 'bex-search'
+searchInputs.style['height'] = '200px';
+searchInputs.classList.add(SEARCH_INPUT_CLASS);
+searchInputs.classList.add('maximized');
+searchFrame.width = '100%';
+
+minimizeButton.onclick = () => {
+  searchInputs.style['height'] = '50px';
+  searchInputs.classList.remove('maximized');
+  searchInputs.classList.add('minimized');
+}
+
+(function () {
+  if (window.location.href.includes('google')) {
+    searchFrame.src = chrome.runtime.getURL('www/index.html') + '#/search';
+    searchInputs.appendChild(searchFrame);
+    try {
+      searchInputOriginal?.parentNode?.insertBefore(searchInputs, searchInputOriginal.nextSibling)
+    } catch (error) {
+      console.log('Error creating component'); 
     }
-  })
-  */
-})
+  //   document.body.prepend(iFrame)
+  }
+})()
+
+export default bexContent;

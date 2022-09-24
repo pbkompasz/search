@@ -51,7 +51,7 @@ import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue'
 
 const essentialLinks: EssentialLinkProps[] = [
   {
-    title: 'Docs',
+    title: 'Docssad',
     caption: 'quasar.dev',
     icon: 'school',
     link: 'https://quasar.dev'
