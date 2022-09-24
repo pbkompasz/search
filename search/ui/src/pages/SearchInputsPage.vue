@@ -40,30 +40,87 @@
           <q-input v-model="terms" filled type="textarea" label="Type terms" />
         </div>
         <div>
-          <q-checkbox v-model="strictMode" label="Every term should appear in the search results" />
+          <q-checkbox
+            v-model="strictMode"
+            label="Every term should appear in the search results"
+          />
         </div>
         <div>
           Each line contains a phrase, a phrase can contain multiple words
-          <q-input v-model="excludedTerms" filled type="textarea" label="Type exclusion terms" />
+          <q-input
+            v-model="excludedTerms"
+            filled
+            type="textarea"
+            label="Type exclusion terms"
+          />
         </div>
       </q-tab-panel>
 
-      <q-tab-panel name="query_options">
-        <q-select v-model="filetype" :options="fileTypeOptions"></q-select>
-        <q-input v-model="site" label="Site"></q-input>
-        <q-input v-model="related" label="Related"></q-input>
-        <q-input v-model="intitle" label="In title"></q-input>
+      <q-tab-panel name="query_options" class="row">
+        <q-select
+          v-model="filetype"
+          :options="fileTypeOptions"
+          class="col-6 option"
+          outlined
+        ></q-select>
+        <q-input
+          v-model="site"
+          label="Site"
+          class="col-6 option"
+          filled
+        ></q-input>
+        <q-input
+          v-model="related"
+          label="Related"
+          class="col-6 option"
+          filled
+        ></q-input>
+        <q-input
+          v-model="intitle"
+          label="In title"
+          class="col-6 option"
+          filled
+        ></q-input>
         <!-- If single word sue inurl -->
-        <q-input v-model="inurl" label="In url"></q-input>
-        <q-input v-model="intext" label="In text"></q-input>
-        <div id="around">
-          <q-input v-model="around.distance" label="Around"></q-input>
-          <q-input v-model="around.firstPhrase" label="Phrase #1"></q-input>
-          <q-input v-model="around.secondPhrase" label="Phrase #2"></q-input>
+        <q-input
+          v-model="inurl"
+          label="In url"
+          class="col-6 option"
+          filled
+        ></q-input>
+        <q-input
+          v-model="intext"
+          label="In text"
+          class="col-6 option"
+          filled
+        ></q-input>
+        <div id="around" class="col-12 row justify-evenly no-wrap">
+          <q-input
+            v-model="around.distance"
+            label="Around"
+            class="option"
+            filled
+          ></q-input>
+          <q-input
+            v-model="around.firstPhrase"
+            label="Phrase #1"
+            class="option"
+            filled
+          ></q-input>
+          <q-input
+            v-model="around.secondPhrase"
+            label="Phrase #2"
+            class="option"
+            filled
+          ></q-input>
         </div>
         <!-- If single word sue inanchor -->
-        <q-input v-model="inanchor" label="Site"></q-input>
-
+        <q-input
+          v-model="inanchor"
+          label="Site"
+          class="col-6 option"
+          filled
+        ></q-input>
       </q-tab-panel>
 
       <q-tab-panel name="other_options">
@@ -80,10 +137,13 @@
   text-decoration: none
   max-width: 50px
   white-space: normal
+.option
+  padding: 5px
 </style>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { useQuasar } from 'quasar';
 
 const dataRangeOptions = [
   {
@@ -117,19 +177,19 @@ const fileTypeOptions = [
     label: 'Pdf',
     value: 'pdf',
   },
-{
+  {
     label: 'Docx',
     value: 'docx',
   },
-{
+  {
     label: 'Txt',
     value: 'txt',
   },
-{
+  {
     label: 'PowerPoint',
     value: 'ppt',
   },
-]
+];
 
 const dateRange = ref(dataRangeOptions[0]);
 watch(dateRange, (val) => {
@@ -138,23 +198,16 @@ watch(dateRange, (val) => {
 const tab = ref('terms');
 
 const terms = ref('');
-const strictMode = ref(false)
+const strictMode = ref(false);
 const excludedTerms = ref('');
 
-// t v-model="filetype" :options="fileTypeOptions"></q-select>
-//         <q-input v-model="site" label="Site"></q-input>
-//         <q-input v-model="related" label="Related"></q-input>
-//         <q-input v-model="intitle" label="In title"></q-input>
-//         <!-- If single word sue inurl -->
-//         <q-input v-model="allinurl" label="In url"></q-input>
-//         <q-input v-model="intext" label="In text"></q-input>
-//         <div id="around">
-//           <q-input v-model="around.distance" label="Around"></q-input>
-//           <q-input v-model="around.firstPhrase" label="Phrase #1"></q-input>
-//           <q-input v-model="around.secondPhrase" label="Phrase #2"></q-input>
-//         </div>
-//         <!-- If single word sue inanchor -->
-//         <q-input v-model="allinanchor" label="Site"></q-inpu
+const $q = useQuasar();
+watch(strictMode, async (val) => {
+  console.log(val);
+  await $q.bex.send('update', {
+    strictMode: val,
+  });
+});
 
 const filetype = ref(fileTypeOptions[0]);
 const site = ref('');

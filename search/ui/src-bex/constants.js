@@ -1,9 +1,11 @@
 const SEARCH_INPUT_CLASS = 'RNNXgb'
 const SEARCH_INPUT_JSNAME = 'RNNXgb'
 const APPBAR_CLASS = 'appbar'
+const INPUT_CLASS = 'gLFyf gsfi'
 
 export {
   SEARCH_INPUT_CLASS,
   SEARCH_INPUT_JSNAME,
   APPBAR_CLASS,
+  INPUT_CLASS,
 }
