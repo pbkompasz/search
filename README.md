@@ -12,7 +12,7 @@ however these operators are complicated to use and hard to memorize.
 
 The purpose of this tool is to enable any user to perform searches that lead to
 better results and faster response times.
-
+![Example](assets/example.png)
 
 ## Installation
 
