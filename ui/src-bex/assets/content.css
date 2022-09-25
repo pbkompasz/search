@@ -1,0 +1,21 @@
+/* Global CSS used within your BEX. This is not preprocessed so this has to be pure CSS. */
+
+.google-blue {
+  color: #4285F4
+}
+
+.target-some-header-class {
+  margin-top: 62px;
+}
+
+#bex-search {
+  min-height: 200px;
+}
+
+.maximized {
+  height: 200px;
+}
+
+.minimized {
+  height: 200px;
+}
