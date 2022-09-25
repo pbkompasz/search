@@ -7,9 +7,12 @@
 ## Tool Description
 
 This tool allows the general user to optimize their Google searches.
-Google provides search operators that allows to optimize searches, 
-however these tools are complicated to use and hard to memorize.
-The purpose of this tool is to enable any user to perform better searches that lead to 
+Google provides search operators that allow optimal searches,
+however these operators are complicated to use and hard to memorize.
+
+The purpose of this tool is to enable any user to perform searches that lead to
+better results and faster response times.
+
 
 ## Installation
 
