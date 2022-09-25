@@ -1,4 +1,7 @@
-type FileType = 'pdf' | 'docx' | 'txt' | 'ppt' | false
+type FileType = {
+  value: 'pdf' | 'docx' | 'txt' | 'ppt' | false
+  label: string
+}
 
 export type QueryOptions = {
   filetype?: FileType
@@ -60,13 +63,13 @@ function createQueryString(
   let baseQuery = '';
   const termsSplit = searchTerm.split('\n');
   for (let i = 0; i < termsSplit.length - 1; i++) {
-    baseQuery += `(${termsSplit[i]}) ${strictMode ? 'AND' : '|'} `
+    baseQuery += `"${termsSplit[i]}" ${strictMode ? 'AND' : '|'} `
   }
-  baseQuery += `(${termsSplit[termsSplit.length - 1]}) `
+  baseQuery += `"${termsSplit[termsSplit.length - 1]}" `
 
   const exclusionTermsSplit = exclusionTerms.split('\n');
   for (let i = 0; i < exclusionTermsSplit.length && exclusionTermsSplit.length > 1; i++) {
-    baseQuery += `~(${exclusionTermsSplit[i]}) `
+    baseQuery += `-"${exclusionTermsSplit[i]}" `
   }
   return baseQuery;
 }
@@ -78,30 +81,30 @@ function parseQueryString(query: string) {
 function applyQueryOptions(queryRaw: string, options: QueryOptions) {
   let newQueryString = queryRaw;
   if (options.filetype) {
-    newQueryString += `filetype: ${options.filetype} `
+    newQueryString += `filetype:${options.filetype.value} `
   }
   // TODO Validate site
   if (options.site) {
-    newQueryString += `site: ${options.site} `
+    newQueryString += `site:${options.site} `
   }
   // TODO Validate site
   if (options.related) {
-    newQueryString += `related: ${options.related} `
+    newQueryString += `related:${options.related} `
   }
   if (options.intitle) {
-    newQueryString += `intitle: (${options.intitle}) `
+    newQueryString += `intitle:(${options.intitle}) `
   }
   if(options.inurl) {
-    newQueryString += `inurl: (${options.inurl}) `
+    newQueryString += `inurl:(${options.inurl}) `
   }
   if (options.intext) {
-    newQueryString += `intext: (${options.intext}) `
+    newQueryString += `intext:(${options.intext}) `
   }
   if (options.around?.distance) {
     newQueryString += `${options.around.firstPhrase} AROUND(${options.around.distance}) ${options.around.secondPhrase} `
   }
   if (options.inanchor) {
-    newQueryString += `inanchor: (${options.inanchor}) `
+    newQueryString += `inanchor:(${options.inanchor}) `
   }
   return newQueryString
 }

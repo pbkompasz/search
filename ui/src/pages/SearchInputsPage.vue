@@ -212,6 +212,15 @@ const fileTypeOptions = [
   },
 ];
 
+/*
+Resources
+  https://ahrefs.com/blog/google-advanced-search-operators/
+  https://ahrefs.com/blog/meta-robots/
+  https://developer.chrome.com/docs/extensions/mv3/manifest/
+  https://developer.chrome.com/docs/extensions/mv3/tut_debugging/
+  https://quasar.dev/quasar-cli-vite/developing-browser-extensions/bex-communication
+*/
+
 const otherOptions = ref({
   dateRange: dataRangeOptions[0],
 });

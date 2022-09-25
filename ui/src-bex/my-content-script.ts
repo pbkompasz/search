@@ -31,7 +31,7 @@ function setInput(value: string) {
 }
 
 ; (function () {
-  if (window.location.href.includes('google')) {
+  if (window.location.href.includes('google') && !window.location.href.includes('search')) {
     searchFrame.src = chrome.runtime.getURL('www/index.html') + '#/search';
     searchInputs.appendChild(searchFrame);
     try {
