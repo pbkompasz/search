@@ -30,20 +30,16 @@ function setInput(value: string) {
   searchInputOriginal.value = value;
 }
 
-searchInputOriginal.addEventListener('input', function (evt) {
-  throw new Error('Not implemented');
-});
-
-;(function () {
+; (function () {
   if (window.location.href.includes('google')) {
     searchFrame.src = chrome.runtime.getURL('www/index.html') + '#/search';
     searchInputs.appendChild(searchFrame);
     try {
       searchInputWrapperOriginal?.parentNode?.insertBefore(searchInputs, searchInputWrapperOriginal.nextSibling)
     } catch (error) {
-      console.log('Error creating component'); 
+      console.log('Error creating component');
     }
-  //   document.body.prepend(iFrame)
+    //   document.body.prepend(iFrame)
   }
 })()
 
@@ -52,4 +48,9 @@ export default bexContent((bridge) => {
     setInput(data.strictMode);
     respond()
   })
+  searchInputOriginal.addEventListener('input', function (evt) {
+    bridge.send('reverse', ({
+      data: 'sent',
+    }))
+  });
 })

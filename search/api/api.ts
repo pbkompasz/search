@@ -1,7 +1,6 @@
 type Filetype = "pdf" | "docx" | "txt" | "ppt"
 
 type QueryOptions = {
-  cache?: boolean
   filetype?: Filetype
   site?: string
   related?: string
@@ -29,6 +28,15 @@ type SearchTerm = {
   condition: ConditionalParameters,
 }[];
 
+interface BaseQuery {
+  toString(): string
+  options: string[]
+}
+
+interface Query extends BaseQuery {
+
+}
+
 // Each 
 enum ConditionalParameters {
   Or,
@@ -40,47 +48,53 @@ enum ConditionalParameters {
 
 */
 
-function getQuery(
+function queryToString() {
+  let resp = ''
+  this.queryOptions.forEach(opt => {
+    resp += opt
+  }) 
+  return resp;
+}
+
+function createQuery(
   searchTerm: SearchTerm,
   QueryOptions: QueryOptions = {},
   otherOptions: Options = {},
-): string | Error {
-  let query = '';
+): BaseQuery {
+  let baseQuery = {
+    toString: queryToString,
+    options: [''],
+  };
   searchTerm.forEach(obj => {
     switch (obj.condition) {
       case ConditionalParameters.Exclusion:
-        query += `~${obj.term} `;
-        break;
-      case ConditionalParameters.Exclusion:
-        query += `~${obj.term} `;
-        break;
-      case ConditionalParameters.Exclusion:
-        query += `~${obj.term} `;
-        break;
-      case ConditionalParameters.Exclusion:
-        query += `~${obj.term} `;
+        baseQuery.options.push(`~${obj.term} `);
         break;
       default:
         break;
     }
   });
-  return query;
+  return baseQuery;  
 }
 
 function parseQueryString(query: string): QueryOptions {
-  return {
-
-  }
+  throw new Error('Not implemented');
 }
 
-const resp = getQuery([{
+function expandQuery(query: BaseQuery | Query): Query {
+  throw new Error('Not implemented');
+}
+
+const resp = createQuery([{
   term: 'name',
   condition: ConditionalParameters.Exclusion,
 }]);
 
 console.log(resp);
 
-export default getQuery;
+export default createQuery;
 export {
-  getQuery,
+  createQuery,
+  expandQuery,
+  parseQueryString,
 }

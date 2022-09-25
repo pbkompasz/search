@@ -209,6 +209,10 @@ watch(strictMode, async (val) => {
   });
 });
 
+$q.bex.on('reverse', ({ data }) => {
+  console.log(data);
+})
+
 const filetype = ref(fileTypeOptions[0]);
 const site = ref('');
 const related = ref('');
