@@ -45,12 +45,12 @@ function setInput(value: string) {
 
 export default bexContent((bridge) => {
   bridge.on('update', ({ data, respond }) => {
-    setInput(data.strictMode);
+    setInput(data.queryStringGenerated);
     respond()
   })
   searchInputOriginal.addEventListener('input', function (evt) {
     bridge.send('reverse', ({
-      data: 'sent',
+      queryRaw: evt?.target?.value ?? '',
     }))
   });
 })
