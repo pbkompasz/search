@@ -34,30 +34,40 @@
     </div>
     <q-tab-panels v-model="tab" animated class="shadow-2 rounded-borders">
       <q-tab-panel class="row no-wrap" name="terms">
-        <div>
-          Each line contains a search term, a term will appear exactly in your
-          search result
+        <div class="q-pr-sm">
           <q-input
             v-model="terms.contains"
             filled
             type="textarea"
             label="Type terms"
-          />
+          >
+            <q-tooltip>
+              <div class="text-caption">
+                Each line contains a search term, a term will appear exactly in your search result
+              </div>
+            </q-tooltip>
+          </q-input>
+          <div>
+            <q-checkbox v-model="terms.strictMode">
+              <div class="text-caption">
+                Every term should appear in the search results
+              </div>
+            </q-checkbox>
+          </div>
         </div>
         <div>
-          <q-checkbox
-            v-model="terms.strictMode"
-            label="Every term should appear in the search results"
-          />
-        </div>
-        <div>
-          Each line contains a phrase, a phrase can contain multiple words
           <q-input
             v-model="terms.excludes"
             filled
             type="textarea"
             label="Type exclusion terms"
-          />
+          >
+            <q-tooltip>
+              <div class="text-caption">
+                Each line contains a phrase, a phrase can contain multiple words
+              </div>
+            </q-tooltip>
+          </q-input>
         </div>
       </q-tab-panel>
 
@@ -128,10 +138,7 @@
         ></q-input>
       </q-tab-panel>
 
-      <q-tab-panel name="other_options">
-        <div class="text-h6">Movies</div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-      </q-tab-panel>
+      <q-tab-panel name="other_options"> none </q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>
@@ -147,9 +154,13 @@
 </style>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed, Ref } from 'vue';
 import { useQuasar } from 'quasar';
-import { createQueryString, applyQueryOptions } from '../api/api';
+import {
+  createQueryString,
+  createQueryOptionsString,
+  QueryOptions,
+} from '../api/api';
 
 const dataRangeOptions = [
   {
@@ -203,12 +214,16 @@ const fileTypeOptions = [
 
 const otherOptions = ref({
   dateRange: dataRangeOptions[0],
-})
-watch(otherOptions, (val) => {
-  console.log(val);
-}, {
-  deep: true,
 });
+watch(
+  otherOptions,
+  (val) => {
+    console.log(val);
+  },
+  {
+    deep: true,
+  }
+);
 const tab = ref('terms');
 
 const terms = ref({
@@ -224,19 +239,22 @@ $q.bex.on('reverse', ({ data }) => {
 });
 const queryStringReceived = ref('');
 
-const queryStringGenerated = ref('');
+const queryStringTermsGenerated = ref('');
+const queryStringGenerated: Ref<string> = computed(() => {
+  return (
+    queryStringTermsGenerated.value + ' ' + queryStringOptionsGenerated.value
+  );
+});
 watch(
   terms,
   async (val) => {
-    console.log(val);
-    const queryStringGenerated = createQueryString(
-      terms.value.contains,
-      terms.value.strictMode,
-      terms.value.excludes
+    queryStringTermsGenerated.value = createQueryString(
+      val.contains,
+      val.strictMode,
+      val.excludes
     );
-    console.log(queryStringGenerated);
     await $q.bex.send('update', {
-      queryStringGenerated,
+      queryStringGenerated: queryStringGenerated.value,
     });
   },
   {
@@ -258,16 +276,30 @@ const queryOptions = ref({
   },
   inanchor: '',
 });
-watch(queryOptions, (val) => {
-  console.log(val);
-  queryStringGenerated.value = applyQueryOptions(queryStringGenerated.value, val);
-}, {
-  deep: true,
-})
+const queryStringOptionsGenerated = ref('');
+watch(
+  queryOptions,
+  async (val) => {
+    queryStringOptionsGenerated.value = createQueryOptionsString(
+      val as QueryOptions
+    );
+    console.log(queryStringGenerated.value);
+    await $q.bex.send('update', {
+      queryStringGenerated: queryStringGenerated.value,
+    });
+  },
+  {
+    deep: true,
+  }
+);
 
-watch(queryStringReceived, (val) => {
-  queryStringGenerated.value = val;
-}, {
-  immediate: true,
-})
+// watch(
+//   queryStringReceived,
+//   (val) => {
+//     queryStringGenerated.value = val;
+//   },
+//   {
+//     immediate: true,
+//   }
+// );
 </script>

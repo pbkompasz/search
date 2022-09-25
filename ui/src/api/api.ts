@@ -1,6 +1,6 @@
 type FileType = 'pdf' | 'docx' | 'txt' | 'ppt' | false
 
-type QueryOptions = {
+export type QueryOptions = {
   filetype?: FileType
   site?: string
   related?: string
@@ -56,7 +56,7 @@ function createQueryString(
   searchTerm: string,
   strictMode: boolean,
   exclusionTerms: string,
-) {
+): string {
   let baseQuery = '';
   const termsSplit = searchTerm.split('\n');
   for (let i = 0; i < termsSplit.length - 1; i++) {
@@ -65,7 +65,7 @@ function createQueryString(
   baseQuery += `(${termsSplit[termsSplit.length - 1]}) `
 
   const exclusionTermsSplit = exclusionTerms.split('\n');
-  for (let i = 0; i < exclusionTermsSplit.length; i++) {
+  for (let i = 0; i < exclusionTermsSplit.length && exclusionTermsSplit.length > 1; i++) {
     baseQuery += `~(${exclusionTermsSplit[i]}) `
   }
   return baseQuery;
@@ -97,14 +97,17 @@ function applyQueryOptions(queryRaw: string, options: QueryOptions) {
   if (options.intext) {
     newQueryString += `intext: (${options.intext}) `
   }
-  if (options.around) {
+  if (options.around?.distance) {
     newQueryString += `${options.around.firstPhrase} AROUND(${options.around.distance}) ${options.around.secondPhrase} `
   }
   if (options.inanchor) {
     newQueryString += `inanchor: (${options.inanchor}) `
   }
-  console.log(newQueryString);
   return newQueryString
+}
+
+function createQueryOptionsString(options: QueryOptions) {
+  return applyQueryOptions('', options);
 }
 
 export default createQueryString;
@@ -112,4 +115,5 @@ export {
   createQueryString,
   applyQueryOptions,
   parseQueryString,
+  createQueryOptionsString,
 }
