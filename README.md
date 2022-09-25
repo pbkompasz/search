@@ -14,6 +14,11 @@ The purpose of this tool is to enable any user to perform searches that lead to
 better results and faster response times.
 ![Example](assets/example.png)
 
+
+[demonstration.webm](https://user-images.githubusercontent.com/47194071/192139663-9a4438a8-3065-44bd-bf6d-fd7177f28522.webm)
+
+
+
 ## Installation
 
 Make sure you have [Node.js version 16.17 or greater](https://nodejs.org/en/)
