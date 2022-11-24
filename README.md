@@ -30,7 +30,6 @@ installed.
 
 ```
 git clone https://github.com/pbkompasz/search
-
 ```
 
 ### Load latest version
